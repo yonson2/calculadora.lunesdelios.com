@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+				<head>
+								<meta charset="UTF-8">
+								<meta name="viewport" content="width=device-width, initial-scale=1.0">
+								<title>Calculadora Signo del Jogo</title>
+								<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+								<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+				</head>
+				<style>
+#result {
+				display: none;
+}
+				</style>
+				<body>
+								<h1>Introduce tu fecha de nacimiento: </h1></br>
+								<form action="#" onsubmit="getAndDisplay(); return false">
+												<input id="date" type="date" value="2023-02-06" />
+												<input type="submit" value="Submit">
+												<pre id="result"></pre>
+								</form>
+								<script>
+												const origin = new Date(2023, 1, 6);
+												const weekdays = [
+																'Domingo de Resurrección',
+																'Lunes de Líos',
+																'Martes de Mierda',
+																'Miércoles Millonarios',
+																'Jueves de Jogo',
+																'Viernes de Vicio/Volqueta',
+																'Sábado Sí',
+												];
+
+												// is math good? https://stackoverflow.com/a/64215557
+												const week = 7 * 24 * 60 * 60 * 1000;
+												const day = 24 * 60 * 60 * 1000;
+
+												function startOfWeek(dt) {
+																const weekday = dt.getDay();
+																return new Date(dt.getTime() - Math.abs(0 - weekday) * day);
+												}
+
+												function weeksBetween(d1, d2) {
+																return Math.ceil((startOfWeek(d2) - startOfWeek(d1)) / week);
+												}
+
+												function getDate() {
+																const d = document.getElementById('date').valueAsDate
+																d.setHours(0, 0, 0)
+
+																return d;
+												}
+
+												function display(d) {
+																const day = d.getDate().toString().padStart(2, '0');
+																const month = (d.getMonth() + 1).toString().padStart(2, '0');
+																const year = d.getFullYear().toString();
+																const formattedDate = day + month + year;
+																window.location.hash = '#!/' + formattedDate;
+
+																const res = {
+																				principal: weekdays[d.getDay()],
+																				ascendente: weekdays[weeksBetween(d, origin) % 7]
+																};
+
+																const view = document.getElementById('result');
+																view.textContent = JSON.stringify(res, null, ' ');
+																view.style.display = "block";
+												}
+
+												function getAndDisplay() {
+																const d = getDate();
+																display(d);
+												}
+
+												//check hash.
+												if (window.location.hash) {
+																const re = /#!\/([0-9]{8})/;
+																const matches = window.location.hash.match(re);
+																if (matches.length > 1) {
+																				const day = matches[1].slice(0, 2);
+																				const month = matches[1].slice(2, 4);
+																				const year = matches[1].slice(4, 8);
+
+																				const dateInput = document.getElementById('date');
+																				dateInput.value = `${year}-${month}-${day}`;
+
+																				const d = new Date(Number(year), Number(month) - 1, Number(day));
+																				display(d);
+																}
+												}
+								</script>
+				</body>
+</html>
