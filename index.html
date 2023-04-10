@@ -88,8 +88,9 @@
 			}
 
 			function calculateYear(birthYear) {
-				const origin = new Date(0, 1, 6);
-				return birthYear - origin.getFullYear() + 1; // year 0 doesn't exist.
+				const origin = new Date(0, 0, 0);
+				origin.setUTCFullYear(1); // year 0 doesn't exist
+				return birthYear - origin.getFullYear();
 			}
 
 			function getDate() {
@@ -112,7 +113,7 @@
 				const res = {
 					principal: weekProxy[d.getDay()],
 					ascendente: weekProxy[weeksBetween(d,origin) % 7],
-					influencia_año: weekProxy[calculateYear(d.getFullYear()) % 7],
+					// influencia_año: weekProxy[calculateYear(d.getFullYear()) % 7],
 				};
 
 				const view = document.getElementById('result');
