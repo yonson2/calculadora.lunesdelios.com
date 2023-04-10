@@ -116,28 +116,36 @@
 			}
 
 			function shareButton() {
-				navigator.clipboard.writeText(window.location.href)
-					.then(() => {
-						const Toast = Swal.mixin({
-							toast: true,
-							position: 'top-end',
-							showConfirmButton: false,
-							timer: 2000,
-							timerProgressBar: true,
-							didOpen: (toast) => {
-								toast.addEventListener('mouseenter', Swal.stopTimer)
-								toast.addEventListener('mouseleave', Swal.resumeTimer)
-							}
-						});
-						Toast.fire({
-							icon: 'success',
-							title: 'Enlace copiado!'
-						})
-					})
-					.catch((err) => {
-						console.error('Failed to copy URL: ', err);
-					});
+				const Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 2000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				});
 
+				if (navigator.share) {
+					navigator.share({
+						title: 'Este es mi signo del Jogo',
+						url: window.location.href,
+					}).then(() => {})
+						.catch(console.error);
+				} else {
+					navigator.clipboard.writeText(window.location.href)
+						.then(() => {
+							Toast.fire({
+								icon: 'success',
+								title: 'Enlace copiado!'
+							})
+						})
+						.catch((err) => {
+							console.error('Failed to copy URL: ', err);
+						});
+				}
 			}
 
 			//check hash.
