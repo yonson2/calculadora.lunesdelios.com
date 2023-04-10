@@ -21,10 +21,7 @@
 	}
 
 	.shake {
-		/* Start the shake animation and make the animation last for 0.5 seconds */
 		animation: shake 0.5s;
-
-		/* When the animation is finished, start again */
 		animation-iteration-count: 1;
 	}
 
@@ -65,6 +62,17 @@
 				'Sábado Sí',
 			];
 
+			const weekProxy = new Proxy(weekdays, {
+				get(target, prop) {
+					if (!isNaN(prop)) {
+						prop = parseInt(prop, 10);
+						if (prop < 0) {
+							prop += target.length;
+						}
+					}        return target[prop];
+				}
+			});
+
 			// is math good? https://stackoverflow.com/a/64215557
 			const week = 7 * 24 * 60 * 60 * 1000;
 			const day = 24 * 60 * 60 * 1000;
@@ -75,7 +83,13 @@
 			}
 
 			function weeksBetween(d1, d2) {
-				return Math.ceil((startOfWeek(d2) - startOfWeek(d1)) / week);
+				let result = Math.round((startOfWeek(d1) - startOfWeek(d2)) / week);
+				return Math.round((startOfWeek(d1) - startOfWeek(d2)) / week);
+			}
+
+			function calculateYear(birthYear) {
+				const origin = new Date(0, 1, 6);
+				return birthYear - origin.getFullYear() + 1; // year 0 doesn't exist.
 			}
 
 			function getDate() {
@@ -92,9 +106,13 @@
 				const formattedDate = day + month + year;
 				window.location.hash = '#!/' + formattedDate;
 
+				console.log(d.getFullYear())
+				console.log(calculateYear(d.getFullYear()))
+				console.log(calculateYear(d.getFullYear()) % 7)
 				const res = {
-					principal: weekdays[d.getDay()],
-					ascendente: weekdays[weeksBetween(d, origin) % 7]
+					principal: weekProxy[d.getDay()],
+					ascendente: weekProxy[weeksBetween(d,origin) % 7],
+					influencia_año: weekProxy[calculateYear(d.getFullYear()) % 7],
 				};
 
 				const view = document.getElementById('result');
