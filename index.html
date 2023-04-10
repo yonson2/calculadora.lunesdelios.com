@@ -1,95 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-				<head>
-								<meta charset="UTF-8">
-								<meta name="viewport" content="width=device-width, initial-scale=1.0">
-								<title>Calculadora Signo del Jogo</title>
-								<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
-								<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
-								<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-				</head>
-				<style>
-#result {
-				display: none;
-}
-				</style>
-				<body>
-								<h1>Introduce tu fecha de nacimiento: </h1></br>
-								<form action="#" onsubmit="getAndDisplay(); return false">
-												<input id="date" type="date" value="2023-02-06" />
-												<input type="submit" value="Calcular">
-												<pre id="result"></pre>
-								</form>
-								<script>
-												const origin = new Date(2023, 1, 6);
-												const weekdays = [
-																'Domingo de Resurrección',
-																'Lunes de Líos',
-																'Martes de Mierda',
-																'Miércoles Millonarios',
-																'Jueves de Jogo',
-																'Viernes de Vicio/Volqueta',
-																'Sábado Sí',
-												];
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Calculadora Signo del Jogo</title>
+		<link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	</head>
+	<style>
+	#result {
+		display: none;
+	}
+	.shake {
+		/* Start the shake animation and make the animation last for 0.5 seconds */
+		animation: shake 0.5s;
 
-												// is math good? https://stackoverflow.com/a/64215557
-												const week = 7 * 24 * 60 * 60 * 1000;
-												const day = 24 * 60 * 60 * 1000;
+		/* When the animation is finished, start again */
+		animation-iteration-count: 1;
+	}
 
-												function startOfWeek(dt) {
-																const weekday = dt.getDay();
-																return new Date(dt.getTime() - Math.abs(0 - weekday) * day);
-												}
+	@keyframes shake {
+		0% { transform: translate(1px, 1px) rotate(0deg); }
+		10% { transform: translate(-1px, -2px) rotate(-1deg); }
+		20% { transform: translate(-3px, 0px) rotate(1deg); }
+		30% { transform: translate(3px, 2px) rotate(0deg); }
+		40% { transform: translate(1px, -1px) rotate(1deg); }
+		50% { transform: translate(-1px, 2px) rotate(-1deg); }
+		60% { transform: translate(-3px, 1px) rotate(0deg); }
+		70% { transform: translate(3px, 1px) rotate(-1deg); }
+		80% { transform: translate(-1px, -1px) rotate(1deg); }
+		90% { transform: translate(1px, 2px) rotate(0deg); }
+		100% { transform: translate(1px, -2px) rotate(-1deg); }
+	}
+	</style>
+	<body>
+		<h1>Introduce tu fecha de nacimiento: </h1></br>
+		<form action="#" onsubmit="getAndDisplay(); return false">
+			<input id="date" type="date" value="2023-02-06" />
+			<input type="submit" value="Calcular">
+		</form>
+		<pre id="result"></pre>
+		<script>
+			const origin = new Date(2023, 1, 6);
+			const weekdays = [
+				'Domingo de Resurrección',
+				'Lunes de Líos',
+				'Martes de Mierda',
+				'Miércoles Millonarios',
+				'Jueves de Jogo',
+				'Viernes de Vicio/Volqueta',
+				'Sábado Sí',
+			];
 
-												function weeksBetween(d1, d2) {
-																return Math.ceil((startOfWeek(d2) - startOfWeek(d1)) / week);
-												}
+			// is math good? https://stackoverflow.com/a/64215557
+			const week = 7 * 24 * 60 * 60 * 1000;
+			const day = 24 * 60 * 60 * 1000;
 
-												function getDate() {
-																const d = document.getElementById('date').valueAsDate
-																d.setHours(0, 0, 0)
+			function startOfWeek(dt) {
+				const weekday = dt.getDay();
+				return new Date(dt.getTime() - Math.abs(0 - weekday) * day);
+			}
 
-																return d;
-												}
+			function weeksBetween(d1, d2) {
+				return Math.ceil((startOfWeek(d2) - startOfWeek(d1)) / week);
+			}
 
-												function display(d) {
-																const day = d.getDate().toString().padStart(2, '0');
-																const month = (d.getMonth() + 1).toString().padStart(2, '0');
-																const year = d.getFullYear().toString();
-																const formattedDate = day + month + year;
-																window.location.hash = '#!/' + formattedDate;
+			function getDate() {
+				const d = document.getElementById('date').valueAsDate
+				d.setHours(0, 0, 0)
 
-																const res = {
-																				principal: weekdays[d.getDay()],
-																				ascendente: weekdays[weeksBetween(d, origin) % 7]
-																};
+				return d;
+			}
 
-																const view = document.getElementById('result');
-																view.textContent = JSON.stringify(res, null, ' ');
-																view.style.display = "block";
-												}
+			function display(d) {
+				const day = d.getDate().toString().padStart(2, '0');
+				const month = (d.getMonth() + 1).toString().padStart(2, '0');
+				const year = d.getFullYear().toString();
+				const formattedDate = day + month + year;
+				window.location.hash = '#!/' + formattedDate;
 
-												function getAndDisplay() {
-																const d = getDate();
-																display(d);
-												}
+				const res = {
+					principal: weekdays[d.getDay()],
+					ascendente: weekdays[weeksBetween(d, origin) % 7]
+				};
 
-												//check hash.
-												if (window.location.hash) {
-																const re = /#!\/([0-9]{8})/;
-																const matches = window.location.hash.match(re);
-																if (matches.length > 1) {
-																				const day = matches[1].slice(0, 2);
-																				const month = matches[1].slice(2, 4);
-																				const year = matches[1].slice(4, 8);
+				const view = document.getElementById('result');
+				view.textContent = JSON.stringify(res, null, ' ');
+				view.style.display = "block";
+				//restart the animation
+				view.classList.add("shake");
+				const newView = view.cloneNode(true);
+				view.parentNode.replaceChild(newView, view);
+			}
 
-																				const dateInput = document.getElementById('date');
-																				dateInput.value = `${year}-${month}-${day}`;
+			function getAndDisplay() {
+				const d = getDate();
+				display(d);
+			}
 
-																				const d = new Date(Number(year), Number(month) - 1, Number(day));
-																				display(d);
-																}
-												}
-								</script>
-				</body>
+			//check hash.
+			function checkHash() {
+				if (window.location.hash) {
+					const re = /#!\/([0-9]{8})/;
+					const matches = window.location.hash.match(re);
+					if (matches.length > 1) {
+						const day = matches[1].slice(0, 2);
+						const month = matches[1].slice(2, 4);
+						const year = matches[1].slice(4, 8);
+
+						const dateInput = document.getElementById('date');
+						dateInput.value = `${year}-${month}-${day}`;
+
+						const d = new Date(Number(year), Number(month) - 1, Number(day));
+						display(d);
+					}
+				}
+			}
+			checkHash();
+			window.onhashchange = checkHash;
+		</script>
+	</body>
 </html>
