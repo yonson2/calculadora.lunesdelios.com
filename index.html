@@ -23,14 +23,6 @@
           <input type="submit"
             class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             value="Calcular" aria-label="Calcular signo">
-          <button id="share" onclick="shareButton(); return false;" aria-label="Compartir" type="button"
-            class="ml-2 rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">
-            <?xml version="1.0" encoding="UTF-8"?><svg class="w-4 h-4" stroke-width="2" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg" color="#ffffff">
-              <path d="M20 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6M12 15V3m0 0L8.5 6.5M12 3l3.5 3.5" stroke="#ffffff"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-          </button>
         </form>
       </div>
       <ul role="list"
@@ -152,42 +144,6 @@
     function getAndDisplay() {
       const d = getDate();
       display(d);
-    }
-
-    function shareButton() {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer)
-          toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-      });
-
-      if (navigator.share) {
-        const shareData = {
-          title: "Este es mi signo del Jogo",
-          url: window.location.href
-        };
-        if (navigator.canShare(shareData)) {
-          navigator.share(shareData)
-            .catch(error => console.error("Error sharing:", error));
-        }
-      } else {
-        navigator.clipboard.writeText(window.location.href)
-          .then(() => {
-            Toast.fire({
-              icon: 'success',
-              title: 'Enlace copiado!'
-            })
-          })
-          .catch((err) => {
-            console.error('Failed to copy URL: ', err);
-          });
-      }
     }
 
     //check hash.
