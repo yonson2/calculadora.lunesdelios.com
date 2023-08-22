@@ -25,14 +25,11 @@
             value="Calcular" aria-label="Calcular signo">
           <button id="share" onclick="shareButton(); return false;" aria-label="Compartir" type="button"
             class="ml-2 rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500">
-            <?xml version="1.0" encoding="UTF-8"?><svg class="w-4 h-4" stroke-width="2" viewBox="0 0 24 24"
-              fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff">
+            <?xml version="1.0" encoding="UTF-8"?><svg class="w-4 h-4" stroke-width="2" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg" color="#ffffff">
               <path d="M20 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6M12 15V3m0 0L8.5 6.5M12 3l3.5 3.5" stroke="#ffffff"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
-          </button>
-
-          <button id="share" onclick="shareButton(); return false;" aria-label="Compartir">
           </button>
         </form>
       </div>
@@ -73,10 +70,10 @@
       {title: "Domingo de Resurrección", description: "Renacimiento sereno. Recarga, reflexión y planes pausados dominan el día. Una pausa antes del nuevo inicio.", src: "images/domingo.webp"},
       {title: "Lunes de Líos", description: "Un desafío al sistema de rutina. Sacrificar el falso bienestar de un aburrido y monótono martes por tacos, risas y vida hoy. Desafía a la norma y opta por la alegría.", src: "images/lunes.webp"},
       {title: "Martes de Mierda", description: "La semana alcanza su punto bajo. Reflexión y melancolía se entrelazan en este día de introspección y aguante.", src: "images/martes.webp"},
-      {title: "Miércoles Millonarios", description: "Mitad de semana, sin inhibiciones, sin tapujos. Gasta sin remordimientos. Hoy no hay lugar para la moderación.", src:"images/miercoles.webp"},
+      {title: "Miércoles Millonarios", description: "Mitad de semana, sin inhibiciones, sin tapujos. Gasta sin remordimientos. Hoy no hay lugar para la moderación.", src: "images/miercoles.webp"},
       {title: "Jueves de Jogo", description: "Dominio sin discordia. Lograr lo deseado en armonía. Un día de influencia positiva donde la voluntad converge en éxito compartido.", src: "images/jueves.webp"},
       {title: "Viernes de Vicio/Volqueta", description: "Extremos contrastantes. Descanso o excesos, cada uno elige. El cuerpo decide entre la calma del hogar y el frenesí de la noche.", src: "images/viernes.webp"},
-      {title: "Sábado Sí", description: "Día de simplicidad y aceptación. Cualquier plan es válido. Un día libre de negativas, abrazando la espontaneidad y la diversión.", src:"images/sabado.webp"},
+      {title: "Sábado Sí", description: "Día de simplicidad y aceptación. Cualquier plan es válido. Un día libre de negativas, abrazando la espontaneidad y la diversión.", src: "images/sabado.webp"},
     ];
 
     const signProxy = new Proxy(signInfo, {
@@ -171,11 +168,14 @@
       });
 
       if (navigator.share) {
-        navigator.share({
-          title: 'Este es mi signo del Jogo',
-          url: window.location.href,
-        }).then(() => { })
-          .catch(console.error);
+        const shareData = {
+          title: "Este es mi signo del Jogo",
+          url: window.location.href
+        };
+        if (navigator.canShare(shareData)) {
+          navigator.share(shareData)
+            .catch(error => console.error("Error sharing:", error));
+        }
       } else {
         navigator.clipboard.writeText(window.location.href)
           .then(() => {
