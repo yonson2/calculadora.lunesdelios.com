@@ -130,6 +130,7 @@
 
       // weeks between birth and the first lunes de líos.
       const ascendantKey = weeksBetween(d, origin) % 7;
+
       const ascendant = document.getElementById("ascendant");
       ascendant.textContent = signProxy[ascendantKey].title;
       const ascendantDescription = document.getElementById("ascendantDescription");
@@ -137,8 +138,9 @@
       const ascendantImg = document.getElementById("ascendantImg");
       ascendantImg.src = signProxy[ascendantKey].src;
 
-      // sum of the differences of weeks between birth and origin and between origin and present day.
-      const weeklyAscendantKey = (Math.abs(weeksBetween(origin, d)) + Math.abs(weeksBetween(today, origin))) % 7;
+      // weeks between birth and origin to the power of 7 is the influence.
+      const weeklyAscendantKey = Math.pow(Math.abs(weeksBetween(origin, d)), 7) % 7;
+
       const weekly = document.getElementById("weekly");
       weekly.textContent = signProxy[weeklyAscendantKey].title;
       const weeklyDescription = document.getElementById("weeklyDescription");
