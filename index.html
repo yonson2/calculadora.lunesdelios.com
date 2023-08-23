@@ -138,7 +138,7 @@
       ascendantImg.src = signProxy[ascendantKey].src;
 
       // sum of the differences of weeks between birth and origin and between origin and present day.
-      const weeklyAscendantKey = (-1 * weeksBetween(origin, d) + weeksBetween(today, origin)) % 7;
+      const weeklyAscendantKey = (Math.abs(weeksBetween(origin, d)) + Math.abs(weeksBetween(today, origin))) % 7;
       const weekly = document.getElementById("weekly");
       weekly.textContent = signProxy[weeklyAscendantKey].title;
       const weeklyDescription = document.getElementById("weeklyDescription");
