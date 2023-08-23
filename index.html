@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta name="description" content="Calcula y comparte tu signo del jogo fácilmente.">
-  <title>Calculadora Signo del Jogo</title>
+  <meta name="description" content="Calcula y comparte tu verdad.">
+  <title>Calculadora Signo Semanal.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -21,8 +21,12 @@
           <input id="date" type="date" value="2023-02-06" aria-label="Calendario"
             class="bg-gray-800 text-white border border-gray-600 rounded p-2 focus:outline-none focus:border-blue-500" />
           <input type="submit"
-            class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+            class="hover:cursor-pointer rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             value="Calcular" aria-label="Calcular signo">
+          <button type="button"
+            class="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+            onclick="shareMe()">Compartir</button>
+
         </form>
       </div>
       <ul role="list"
@@ -121,19 +125,23 @@
       const mainImg = document.getElementById("mainImg");
       mainImg.src = signProxy[d.getDay()].src;
 
+      // weeks between birth and the first lunes de líos.
+      const ascendantKey = weeksBetween(d, origin) % 7;
       const ascendant = document.getElementById("ascendant");
-      ascendant.textContent = signProxy[weeksBetween(d, origin) % 7].title;
+      ascendant.textContent = signProxy[ascendantKey].title;
       const ascendantDescription = document.getElementById("ascendantDescription");
-      ascendantDescription.textContent = signProxy[weeksBetween(d, origin) % 7].description;
+      ascendantDescription.textContent = signProxy[ascendantKey].description;
       const ascendantImg = document.getElementById("ascendantImg");
-      ascendantImg.src = signProxy[weeksBetween(d, origin) % 7].src;
+      ascendantImg.src = signProxy[ascendantKey].src;
 
+      // sum of the differences of weeks between birth and origin and between origin and present day.
+      const weeklyAscendantKey = (-1 * weeksBetween(origin, d) + weeksBetween(today, origin)) % 7;
       const weekly = document.getElementById("weekly");
-      weekly.textContent = signProxy[weeksBetween(today, origin) % 7].title;
+      weekly.textContent = signProxy[weeklyAscendantKey].title;
       const weeklyDescription = document.getElementById("weeklyDescription");
-      weeklyDescription.textContent = signProxy[weeksBetween(today, origin) % 7].description;
+      weeklyDescription.textContent = signProxy[weeklyAscendantKey].description;
       const weeklyImg = document.getElementById("weeklyImg");
-      weeklyImg.src = signProxy[weeksBetween(today, origin) % 7].src;
+      weeklyImg.src = signProxy[weeklyAscendantKey].src;
 
       const showThings = document.querySelectorAll('.hidden');
       showThings.forEach(element => {
@@ -144,6 +152,23 @@
     function getAndDisplay() {
       const d = getDate();
       display(d);
+    }
+
+    async function shareMe() {
+      const myDay = signProxy[getDate().getDay()]
+      const shareData = {
+        title: `Yo soy ${myDay.title}, ¿Y tú?`,
+        text: myDay.description,
+        url: window.location.href,
+      };
+
+      if (navigator.canShare(shareData)) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          console.error(err);
+        }
+      }
     }
 
     //check hash.
