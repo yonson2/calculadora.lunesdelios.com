@@ -157,19 +157,43 @@
     }
 
     async function shareMe() {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      });
+
       const myDay = signProxy[getDate().getDay()]
       const shareData = {
-        title: `Yo soy ${myDay.title}, ¿Y tú?`,
-        text: myDay.description,
+        title: `${myDay.title} - Lunes de Líos`,
+        text: `Yo soy ${myDay.title}, ¿Y tú?`,
         url: window.location.href,
       };
 
-      if (navigator.canShare(shareData)) {
+      if (navigator.canShare && navigator.canShare(shareData)) {
         try {
           await navigator.share(shareData);
         } catch (err) {
           console.error(err);
         }
+      } else {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(window.location.href)
+            .then(() => {
+              Toast.fire({
+                icon: 'success',
+                title: 'Enlace copiado!'
+              })
+            })
+            .catch((e) => console.error(e));
+        }
+
       }
     }
 
