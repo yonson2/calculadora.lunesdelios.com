@@ -20,12 +20,14 @@
         <form class="pt-8" action="#" onsubmit="getAndDisplay(); return false;">
           <input id="date" type="date" value="2023-02-06" aria-label="Calendario"
             class="bg-gray-800 text-white border border-gray-600 rounded p-2 focus:outline-none focus:border-blue-500" />
-          <input type="submit"
-            class="hover:cursor-pointer rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-            value="Calcular" aria-label="Calcular signo">
-          <button type="button"
-            class="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
-            onclick="shareMe()">Compartir</button>
+          <div class="block pt-12 sm:pt-0 sm:inline sm:pl-12 xl:pl-1">
+            <input type="submit"
+              class="hover:cursor-pointer rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              value="Calcular" aria-label="Calcular signo">
+            <button type="button"
+              class="rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+              onclick="shareMe()">Compartir</button>
+          </div>
 
         </form>
       </div>
